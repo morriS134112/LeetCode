@@ -1,6 +1,4 @@
-/**
- * Note: The returned array must be malloced, assume caller calls free().
- */
+
 int* twoSum(int* nums, int numsSize, int target, int* returnSize) {
     *returnSize = 2;
 
@@ -16,4 +14,31 @@ int* twoSum(int* nums, int numsSize, int target, int* returnSize) {
         }
     }
     return NULL;
+
 }
+
+/**
+1. *returnSize = 2; (告訴系統：這個陣列有多長)
+原因：C 語言的陣列「本身不知道」自己有多長。
+
+在 Python 中，你可以用 len(list) 知道長度。
+但在 C 語言中，當你回傳一個指標 int* 給 LeetCode 的系統時，系統只拿到一個記憶體位址（例如 0xAB12）。
+系統不知道要從這個位址讀取幾個數字。是要讀 2 個？還是 100 個？
+這行程式碼的作用：
+returnSize 是 LeetCode 傳進來的一個指標（就像一張空白的紙條）。
+
+*returnSize = 2 的意思就是：我們在紙條上寫上「2」。
+當函式結束後，系統會拿起這張紙條看：「喔，原來你回傳的陣列裡面有 2 個數字啊！」然後系統才會去讀取 result[0] 和 result[1]。
+如果你不寫： 系統看到的紙條可能是亂碼，它可能只讀 0 個數字（判斷錯誤），或者讀 1000 個數字（導致記憶體越界錯誤）。
+
+2. malloc (記憶體配置)
+原理：malloc 是向系統申請一塊「永久」的記憶體（存在 Heap 上）。
+特點：除非有人手動呼叫 free()，否則這塊記憶體會一直存在，即使函式結束了也不會消失。
+結果：你把這塊記憶體的鑰匙（指標）交給 LeetCode 系統，系統之後依然能安全地讀取裡面的資料。最後 LeetCode 系統會負責幫你 free() 掉它。
+簡單比喻
+
+malloc：這就像是你去銀行租了一個保險箱放東西。即使你離開了銀行（函式結束），保險箱裡的東西還是在那裡，別人拿著鑰匙就能去取。
+(如果是區域變數，就像是在銀行的櫃檯臨時寫字，你一人走，櫃檯就被清理乾淨了。)
+
+*returnSize：這就像是你把保險箱鑰匙交給別人的時候，順便附上一張便條紙，上面寫著：「箱子裡有 2 塊金條」。如果沒這張紙，對方可能打開箱子卻不知道該拿幾個東西出來。
+**/
