@@ -1,0 +1,16 @@
+int maxSubArray(int* nums, int numsSize) {
+    int max_cur = nums[0],max_global = nums[0];
+
+    for(int i = 1;i<numsSize;i++){
+        max_cur = fmax(nums[i],max_cur+nums[i]);
+        max_global = fmax(max_global,max_cur);
+    }
+    return max_global;
+}
+
+/**
+max_curr (目前的 max)：代表 「必須包含當前數字 nums[i] 的最大子陣列和」。
+這就像是一個正在滾動的雪球。
+max_global (全域的 max)：代表 「到目前為止看過的所有子陣列中，最大的那個和」。
+這就像是歷史最高紀錄
+ */
