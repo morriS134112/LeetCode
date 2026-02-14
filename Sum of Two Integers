@@ -1,0 +1,17 @@
+int getSum(int a, int b) {
+    unsigned int ua = (unsigned int)a;
+    unsigned int ub = (unsigned int)b;
+
+    while(ub != 0){
+        unsigned int carry = (ua & ub) << 1;
+        ua = ua ^ ub;
+        ub = carry;
+    }
+    return ua;
+}
+/**核心原理：數位邏輯電路 (半加器/全加器)
+在二進位加法中，我們可以把「加法」拆成兩個步驟：
+
+不進位的加法 (XOR ^)：只算 1+0=1, 0+1=1, 1+1=0 (0+0=0)。
+只算進位 (AND & + 左移 <<)：只看哪裡發生了 1+1 (會產生進位)，然後把進位推到下一位。
+不斷重複這兩個步驟，直到沒有進位為止，就像我們在紙上列直式加法一樣。 */
